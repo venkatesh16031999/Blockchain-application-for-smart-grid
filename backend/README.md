@@ -1,4 +1,4 @@
-# dockerized-nodejs-app with Mongodb
+# Smart_Grid_Backend
 
 ## Pre-requisite
 1. Install docker
