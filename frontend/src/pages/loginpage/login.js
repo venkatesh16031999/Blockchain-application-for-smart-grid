@@ -14,7 +14,7 @@ class Login extends Component{
     }
 
 login=()=>{
-
+    this.props.history.push("/dashboard/home");
 }
 
 forgetPassword=()=>{

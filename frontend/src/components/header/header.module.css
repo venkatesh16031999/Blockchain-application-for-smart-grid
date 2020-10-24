@@ -1,7 +1,9 @@
 .headerwrapper{
-    height: 60px;
-    box-shadow: 0px 1px 3px  black;
+    height: 8vh;
+    /* box-shadow: 0px 0px 8px  rgba(0, 0, 0, 0.432); */
     z-index: 1;
+    background-color: #FFDF6C !important;
+    position: sticky;
 }
 
 .nostyle{
