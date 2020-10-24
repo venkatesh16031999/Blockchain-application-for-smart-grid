@@ -19,7 +19,7 @@ class Signup extends Component{
     }
 
     register= ()=>{
-
+        this.props.history.push("/dashboard/home");
     }
 
     render(){

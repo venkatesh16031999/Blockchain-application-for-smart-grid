@@ -1,0 +1,11 @@
+.dashlist{
+    padding: 0px !important;
+    height: 100vh;
+    background-color: rgb(248, 244, 244);
+}
+
+.pageContainer{
+    height: 100vh;
+    padding: 0px !important;
+    overflow-y: auto;
+}
