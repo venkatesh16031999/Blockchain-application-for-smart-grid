@@ -6,8 +6,14 @@ import ResetPassword from './pages/resetpasswordpage/reset';
 import ForgetPassword from './pages/forgetpassword/forgetpassword';
 import HomePage from './pages/homepage/Home';
 import DashboardContainer from './pages/dashboardcontainer/dashboardcontainer';
+import EB from './etheruem/EB';
 
 class App extends Component{
+
+  async componentDidMount() {
+    let ownerAddress = await EB.methods.admin().call();
+    console.log("Owner Address : ",ownerAddress);
+  }
 
   render(){
 

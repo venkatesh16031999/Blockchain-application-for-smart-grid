@@ -13,7 +13,7 @@ const state = {
       data: [65, 59, 80, 81, 56]
     },
     {
-      label: 'Current Generation',
+      label: 'Transfered Current',
       backgroundColor: '#1e2446',
       borderColor: 'rgba(0,0,0,1)',
       borderWidth: 0,
