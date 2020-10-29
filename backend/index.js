@@ -7,8 +7,7 @@ const dotenv = require("dotenv");
 dotenv.config({path:"./config/config.env"});
 
 // databsae
-const db = require("./db/db");
-db.run();
+const db = require("./db/db")();
 
 // express session middleware
 

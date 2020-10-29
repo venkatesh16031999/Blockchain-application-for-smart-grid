@@ -1,21 +1,26 @@
+const Provider = require("../model/provider");
 const bcrypt = require("bcrypt");
 
 
-exports.providerSignup = (db) => async (req, res,next) => {
-    const { name, email, city, mobileNumber, password, confirmPassword } = req.body;
+exports.providerSignup = async (req, res,next) => {
+    const { name, email, city, number, password, accountAddress, ebId} = req.body;
     try{
 
     const encryptedPassword = await bcrypt.hash(password,8);
 
-    const user = await db().collection("sellerAuth").insertOne({
+    const provider = new Provider({
         name,
         email,
         city,
-        mobileNumber,
-        password:encryptedPassword
+        number,
+        password:encryptedPassword,
+        accountAddress,
+        ebId
     });
 
-    if(!user){
+    const providerData = await provider.save();     
+
+    if(!providerData){
         const error = new Error("Registration fails");
         error.statusCode = 401;
         next(error);
@@ -32,11 +37,11 @@ exports.providerSignup = (db) => async (req, res,next) => {
 
 }
 
-exports.providerLogin = (db) => async (req, res,next) => {
+exports.providerLogin = async (req, res,next) => {
     const { email, password } = req.body;
     try{
-    
-    const user = await db().collection("sellerAuth").findOne({email:email},{fields:{email:1,password:1,_id:0}});
+    const user = await Provider.findOne({email:email});
+    console.log(user);
     const decryptedPassword = await bcrypt.compare(password,user.password);
 
      if(!decryptedPassword){

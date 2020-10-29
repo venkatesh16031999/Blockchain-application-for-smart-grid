@@ -1,5 +1,6 @@
 import React,{ Component } from 'react';
 import styles from  './login.module.css'
+import InputField from '../../components/input-field/inputfield';
 import {Container,Row,Col} from 'react-bootstrap';
 import { Form, Input , Button } from 'semantic-ui-react'
 import { Link , Redirect } from "react-router-dom"; 
@@ -14,7 +15,16 @@ class Login extends Component{
     }
 
 login=()=>{
+    console.log(this.state);
     this.props.history.push("/dashboard/home");
+}
+
+onEmailChange = (email) => {
+    this.setState({email:email});
+}
+
+onPasswordChange = (password) => {
+    this.setState({password:password});
 }
 
 forgetPassword=()=>{
@@ -44,19 +54,20 @@ render(){
                             </Col>
                            <Col md={10}>
                            <Form>
-                            <Form.Field className={styles.field}>
-                            <Input icon='users' iconPosition='left' 
-                            onChange={event=>this.setState({email:event.target.value})}
-                            placeholder='Email Id' />
-                            </Form.Field>
-                            <Form.Field className={styles.field}>
-                            <Input icon='keyboard' 
-                            iconPosition='left' 
-                            placeholder='Password'
+                            <InputField 
+                            type="email"
+                            icon='users' 
+                            placeholder='Email Id'
+                            onInputChange={this.onEmailChange}
+                            >
+                            </InputField>
+                            <InputField 
                             type="password"
-                            onChange={event=>this.setState({password:event.target.value})}
-                            />
-                            </Form.Field>
+                            icon='keyboard' 
+                            placeholder='Password'
+                            onInputChange={this.onPasswordChange}
+                            >
+                            </InputField>
                             </Form>
                            </Col>
                             <Col md={10} >

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import styles from  './signup.module.css'
+import InputField from '../../components/input-field/inputfield';
 import {Container,Row,Col} from 'react-bootstrap';
 import { Form, Input , Button } from 'semantic-ui-react'
 import { Link , Redirect } from "react-router-dom"; 
@@ -12,15 +13,28 @@ class Signup extends Component{
         email:"",
         password:"",
         userData:"",
-        // nameValidation:false,
-        // numberValidation:false,
-        // emailValidation:false,
-        // passwordValidation:false
     }
 
     register= ()=>{
         this.props.history.push("/dashboard/home");
     }
+
+    onNameChange = (name) => {
+        this.setState({name:name});
+    }
+    
+    onNumberChange = (number) => {
+        this.setState({number:number});
+    }
+
+    onEmailChange = (email) => {
+        this.setState({email:email});
+    }
+
+    onPasswordChange = (password) => {
+        this.setState({password:password});
+    }
+
 
     render(){
 
@@ -46,22 +60,18 @@ class Signup extends Component{
                             </Col>
                            <Col md={10}>
                            <Form>
-                           <Form.Field className={styles.field}>
-                            <Input icon='address book' iconPosition='left' placeholder='Name' onChange={(event)=>{ this.setState({name:event.target.value}) }} />
-                            </Form.Field>
-                            <p className={styles.paraErrorNoDisplay}>Name is Required</p>
-                            <Form.Field className={styles.field}>
-                            <Input icon='phone' iconPosition='left' placeholder='Phone Number' onChange={(event)=>{ this.setState({number:event.target.value}) }} />
-                            </Form.Field>
-                            <p className={styles.paraErrorNoDisplay}>Number should be minimum 10 digits</p>
-                            <Form.Field className={styles.field}>
-                            <Input icon='users' iconPosition='left' placeholder='Email Id' onChange={(event)=>{ this.setState({email:event.target.value}) }} />
-                            </Form.Field>
-                            <p className={styles.paraErrorNoDisplay}>Email is Required</p>
-                            <Form.Field className={styles.field}>
-                            <Input icon='keyboard' iconPosition='left' type="password" placeholder='Password' onChange={(event)=>{ this.setState({password:event.target.value}) }} />
-                            </Form.Field>
-                            <p className={styles.paraErrorNoDisplay}>Email is Required</p>
+                           <InputField className={styles.field}>
+                            <Input icon='address book' iconPosition='left' placeholder='Name' onInputChange={this.onNameChange} />
+                            </InputField>
+                            <InputField className={styles.field}>
+                            <Input icon='phone' iconPosition='left' placeholder='Phone Number' onInputChange={this.onNumberChange} />
+                            </InputField>
+                            <InputField className={styles.field}>
+                            <Input icon='users' iconPosition='left' placeholder='Email Id' onInputChange={this.onEmailChange} />
+                            </InputField>
+                            <InputField className={styles.field}>
+                            <Input icon='keyboard' iconPosition='left' type="password" placeholder='Password' onInputChange={this.onPasswordChange} />
+                            </InputField>
                             </Form>
                            </Col>
                            <Col md={10}>

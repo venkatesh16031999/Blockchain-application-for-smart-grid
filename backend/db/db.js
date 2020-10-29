@@ -1,18 +1,12 @@
-const { MongoClient } = require("mongodb");
+const mongoose = require("mongoose");
 
-const client = new MongoClient("mongodb://mongo:27017",{useUnifiedTopology:true});
-let database;
-
-exports.run = async () => {
+const db = async () =>{
     try{
-        await client.connect();
-        database = await client.db("smart_grid_dev");
-        console.log("Database connected");
+        await mongoose.connect("mongodb://mongo:27017/smart_grid_dev",{useUnifiedTopology:true});
+        console.log("db connected");
     }catch(e){
-        console.log(e.message);
+        console.log("db not connected : ",e.message);
     }
 }
 
-exports.getDb = () => {
-    return database;
-};
+module.exports = db;
