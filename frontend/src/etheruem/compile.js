@@ -8,18 +8,35 @@ console.log(buildPath);
 
 fs.removeSync(buildPath);
 
-const filePath=path.resolve(__dirname,'contract','Campaign.sol');
+const filePath=path.resolve(__dirname,'contract','EB.sol');
 const source=fs.readFileSync(filePath,'utf-8');
 
-fs.ensureDirSync(buildPath);
+var input = {
+    language: 'Solidity',
+    sources: {
+      'EB.sol': {
+        content: source
+      }
+    },
+    settings: {
+      outputSelection: {
+        '*': {
+          '*': ['*']
+        }
+      }
+    }
+  };
+  
+  var output = JSON.parse(solc.compile(JSON.stringify(input)));
 
-const output=solc.compile(source,1).contracts;
+  fs.ensureDirSync(buildPath);
 
-for(let contract in output){
-    
-    fs.outputJsonSync(
-        path.resolve(buildPath, contract.replace(":","") + ".json"),
-        output[contract]
+  for (var contractName in output.contracts['EB.sol']) {
+
+        fs.outputJsonSync(
+        path.resolve(buildPath, contractName + ".json"),output.contracts['EB.sol'][contractName]
     );
+  }
 
-}
+
+

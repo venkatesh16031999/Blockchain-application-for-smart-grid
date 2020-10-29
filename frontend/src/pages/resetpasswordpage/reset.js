@@ -1,5 +1,6 @@
 import React,{ Component } from 'react';
 import styles from  './login.module.css'
+import InputField from '../../components/input-field/inputfield';
 import {Container,Row,Col} from 'react-bootstrap';
 import { Form, Input , Button } from 'semantic-ui-react'
 import { Link , Redirect } from "react-router-dom"; 
@@ -14,6 +15,10 @@ class Login extends Component{
   setpassword=()=>{
 
   }
+
+  onPasswordChange = (password) => {
+    this.setState({password:password});
+}
 
 
 render(){
@@ -32,11 +37,13 @@ render(){
                             </Col>
                            <Col md={10}>
                            <Form>
-                            <Form.Field className={styles.field}>
-                            <Input icon='users' iconPosition='left' 
-                            onChange={event=>this.setState({password:event.target.value})}
-                            placeholder='Password' />
-                            </Form.Field>
+                            <InputField 
+                            type="Password"
+                            icon='users' 
+                            placeholder='Password'
+                            onInputChange={this.onPasswordChange}
+                            >
+                            </InputField>
                             </Form>
                            </Col>
                            <Col md={10}>
