@@ -7,4 +7,6 @@ router.post("/providerSignup",authentication.providerSignup);
 
 router.post("/providerLogin",authentication.providerLogin);
 
+router.get("/getProvider/:ebId",authentication.getProvider);
+
 module.exports = router;

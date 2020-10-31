@@ -60,3 +60,26 @@ exports.providerLogin = async (req, res,next) => {
     }
 
 }
+
+exports.getProvider = async (req, res,next) => {
+    const { ebId } = req.params;
+    try{
+    const user = await Provider.find({ebId:ebId});
+    console.log(user);
+
+     if(!user){
+        const error = new Error("User not found");
+        error.statusCode = 401;
+        next(error);
+    }
+
+        res.status(201).json({result: user});
+        
+    }catch(err){
+        if(!err.statusCode){
+            err.statusCode = 500;
+            next(err);
+        }
+    }
+
+}
