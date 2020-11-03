@@ -87,6 +87,7 @@ contract EB{
                 ebId: ebId,
                 isAmountPaid: false
             });
+            lastTransaction[ebId] = newTransaction;
             
             transactionList[ebId][timestamp] = newTransaction;
     }

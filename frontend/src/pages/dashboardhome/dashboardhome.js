@@ -19,7 +19,7 @@ class DashboardHome extends Component {
     async componentDidMount(){
         
         try{
-            const providerData = await axios.get("/getProvider/test-id");
+            const providerData = await axios.get("/getProvider/"+this.props.match.params.id);
             const {city, ebId, name, number,email} = providerData.data.result[0];
 
             this.setState({city, ebId, name, number, email});

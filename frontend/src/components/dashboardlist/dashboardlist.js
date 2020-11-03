@@ -16,7 +16,7 @@ class DashboardList extends Component{
                         <Row>
                             <Col md={12}>
                                 <NavLink 
-                                activeClassName={styles.isactive} exact={true} to='/dashboard/home'>
+                                activeClassName={styles.isactive} exact={true} to='/dashboard/home/test-id'>
                                     <Row>
                                         <Col md={12}  className={styles.list}>
                                             Home
@@ -26,7 +26,7 @@ class DashboardList extends Component{
                             </Col>
                             <Col md={12}>
                                 <NavLink 
-                                activeClassName={styles.isactive} to='/dashboard/transaction'>
+                                activeClassName={styles.isactive} to='/dashboard/transaction/test-id'>
                                     <Row>
                                         <Col md={12} className={styles.list}>
                                             transaction
@@ -36,7 +36,7 @@ class DashboardList extends Component{
                             </Col>
                             <Col md={12}>
                                 <NavLink 
-                                activeClassName={styles.isactive} to='/dashboard/accountdetails'>
+                                activeClassName={styles.isactive} to='/dashboard/accountdetails/test-id'>
                                     <Row>
                                         <Col md={12} className={styles.list}>
                                             Account Details
