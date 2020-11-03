@@ -50,8 +50,10 @@ app.use(bodyParser.json());
 // routes
 const authenticationRouter = require("./routes/authentication");
 const authRouter = require("./routes/google_auth");
+const transactionRouter = require("./routes/transaction");
 
 app.use(authenticationRouter);
+app.use(transactionRouter);
 app.use("/auth",authRouter);
 
 app.get("/",(req,res)=>{

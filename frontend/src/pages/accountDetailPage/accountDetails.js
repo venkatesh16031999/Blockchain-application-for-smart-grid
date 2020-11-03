@@ -1,8 +1,12 @@
 import React,{Component,Fragment} from 'react';
-import {Col,Row,Container} from 'react-bootstrap';
+import {Col,Row,Container,Button} from 'react-bootstrap';
+import ModalContainer from '../../components/modal/modal';
 import styles from './accounts.module.css';
 import web3 from '../../etheruem/web3';
 import EBContract from '../../etheruem/EB';
+import InputField from '../../components/input-field/inputfield';
+import { Form } from 'semantic-ui-react'
+
 
 class Accountdetails extends Component {
 
@@ -10,21 +14,56 @@ class Accountdetails extends Component {
         accountAddress:"",
         balance:0,
         inrBalance:0,
-        lastTransactionWatts:0
+        lastTransactionWatts:0,
+        modalShow:false,
+        watts:0,
+        EBID:""
+    }
+
+    onCurrentValueChange = (watts) => {
+        this.setState({watts:watts});
+    }
+    
+    getLastTransaction = async () =>{
+        return await EBContract.methods.getLastTransaction(this.props.match.params.id).call();
     }
 
     async componentDidMount(){
+
         const accounts = await web3.eth.getAccounts();
         let balance = await web3.eth.getBalance(accounts[0]);
         balance = await web3.utils.fromWei(balance,'ether');
 
-        const lastTransaction = await EBContract.methods.getLastTransaction("test-id").call();
+        const lastTransaction = this.getLastTransaction();
         this.setState({
             accountAddress:accounts[0],
             balance:balance,
             inrBalance:Math.round(balance*26000),
-            lastTransactionWatts:lastTransaction[0]
+            lastTransactionWatts:lastTransaction[0],
+            EBID:this.props.match.params.id
         });
+    }
+
+    setModalShow(stateValue){
+        this.setState({modalShow:stateValue});
+    }
+
+    sendElectricity = async () =>{
+        const { accountAddress,EBID, watts } = this.state;
+
+        try{
+            await EBContract.methods.sendElectricPower(watts,EBID,Date.now()).send({
+                from:accountAddress
+            });
+            const lastTransaction = this.getLastTransaction();
+
+            
+
+            this.setModalShow(false);
+        }catch(e){
+            console.log(e);
+        }
+
     }
 
     render(){
@@ -36,6 +75,27 @@ class Accountdetails extends Component {
                             <Container fluid>
                                     <Row>
                                         <Col md={12} className={styles.accountswarpper}>
+                                        <Button variant="primary" onClick={() => this.setModalShow(true)}>
+                                                Launch vertically centered modal
+                                            </Button>
+
+                                            <ModalContainer
+                                                show={this.state.modalShow}
+                                                onHide={() => this.setModalShow(false)}
+                                                onSubmit={this.sendElectricity}
+                                            >
+
+                                                <Form>
+                                                    <InputField 
+                                                        type="email"
+                                                        icon='users' 
+                                                        placeholder='Enter the no of Watts'
+                                                        onInputChange={this.onCurrentValueChange}
+                                                        >
+                                                    </InputField>
+                                                </Form>
+
+                                            </ModalContainer>
                                         </Col>
                                     </Row>
                             </Container>

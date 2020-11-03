@@ -21,9 +21,9 @@ class DashboardLayout extends Component {
                         <Row>
                             <Col md={12} className="p-0">
                                 <Switch>
-                                    <Route path="/dashboard/transaction" component={DashboardTransaction}/>
-                                    <Route path="/dashboard/home" exact component={DashboardHome}/>
-                                    <Route path="/dashboard/accountdetails" exact component={Accountdetails}/>
+                                    <Route path="/dashboard/transaction/:id" component={DashboardTransaction}/>
+                                    <Route path="/dashboard/home/:id" exact component={DashboardHome}/>
+                                    <Route path="/dashboard/accountdetails/:id" exact component={Accountdetails}/>
                                 </Switch>
                             </Col>
                         </Row>

@@ -38,7 +38,8 @@ const providerSchema = new mongoose.Schema({
         type: String,
         required: true,
         trim: true
-    }
+    },
+    transactions:[{type: mongoose.Schema.Types.ObjectId,ref:'Transaction'}]
 });
 
 const model = mongoose.model("Provider",providerSchema);
