@@ -21,7 +21,7 @@ class Signup extends Component{
     }
 
     register = async () => {
-
+        localStorage.removeItem("ebId");
         const { name,number,email,password, EBID,city} = this.state;
         this.setState({isLoading:true});
         try{
@@ -36,11 +36,9 @@ class Signup extends Component{
                 accountAddress:accounts[0],
                 ebId:EBID
             });
-
-            console.log(providerData);
-
+            localStorage.setItem("ebId",EBID);
             this.setState({isLoading:false});
-            this.props.history.push("/dashboard/home");
+            this.props.history.push("/dashboard/home/"+EBID);
         }catch(e){
             this.setState({isLoading:false});
             console.log(e);

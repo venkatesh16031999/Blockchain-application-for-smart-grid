@@ -1,10 +1,25 @@
 import React,{Component,Fragment} from 'react';
 import {Col,Row,Container,Table} from 'react-bootstrap';
 import {withRouter} from 'react-router-dom';
-
+import axios from '../../axios';
 import styles from './dashboardtransaction.module.css';
 
 class DashboardTransaction extends Component {
+
+    state = {
+        transactionList: []
+    }
+
+    async componentDidMount(){
+        const ebId = localStorage.getItem("ebId");
+        const transaction = await axios.get("/getTransactionList/"+ebId);
+        const transactionList = transaction.data.result.map(transactionData=>{
+            return transactionData.transaction
+        })
+        console.log(transactionList);
+        this.setState({transactionList:transactionList});
+    }
+
     render(){
         return (
             <Fragment>
@@ -34,73 +49,22 @@ class DashboardTransaction extends Component {
                                                     <th>SI NO</th>
                                                     <th>Date</th>
                                                     <th>Transfered (Watts)</th>
-                                                    <th>(need to confirm)</th>
+                                                    <th>Amount Paid</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr>
-                                                    <td>1</td>
-                                                    <td>Mark</td>
-                                                    <td>Otto</td>
-                                                    <td>@mdo</td>
-                                                    </tr>
-                                                    <tr>
-                                                    <td>2</td>
-                                                    <td>Jacob</td>
-                                                    <td>Thornton</td>
-                                                    <td>@fat</td>
-                                                    </tr>
-                                                    <tr>
-                                                    <td>1</td>
-                                                    <td>Mark</td>
-                                                    <td>Otto</td>
-                                                    <td>@mdo</td>
-                                                    </tr><tr>
-                                                    <td>1</td>
-                                                    <td>Mark</td>
-                                                    <td>Otto</td>
-                                                    <td>@mdo</td>
-                                                    </tr><tr>
-                                                    <td>1</td>
-                                                    <td>Mark</td>
-                                                    <td>Otto</td>
-                                                    <td>@mdo</td>
-                                                    </tr><tr>
-                                                    <td>1</td>
-                                                    <td>Mark</td>
-                                                    <td>Otto</td>
-                                                    <td>@mdo</td>
-                                                    </tr><tr>
-                                                    <td>1</td>
-                                                    <td>Mark</td>
-                                                    <td>Otto</td>
-                                                    <td>@mdo</td>
-                                                    </tr><tr>
-                                                    <td>1</td>
-                                                    <td>Mark</td>
-                                                    <td>Otto</td>
-                                                    <td>@mdo</td>
-                                                    </tr><tr>
-                                                    <td>1</td>
-                                                    <td>Mark</td>
-                                                    <td>Otto</td>
-                                                    <td>@mdo</td>
-                                                    </tr><tr>
-                                                    <td>1</td>
-                                                    <td>Mark</td>
-                                                    <td>Otto</td>
-                                                    <td>@mdo</td>
-                                                    </tr><tr>
-                                                    <td>1</td>
-                                                    <td>Mark</td>
-                                                    <td>Otto</td>
-                                                    <td>@mdo</td>
-                                                    </tr><tr>
-                                                    <td>1</td>
-                                                    <td>Mark</td>
-                                                    <td>Otto</td>
-                                                    <td>@mdo</td>
-                                                    </tr>
+                                                    {
+                                                        this.state.transactionList.map((transaction,index)=>{
+                                                            return (
+                                                                <tr>
+                                                                    <td>{index+1}</td>
+                                                                    <td>{new Date(transaction.timestamp).toDateString()}</td>
+                                                                    <td>{transaction.watts}</td>
+                                                                    <td>{transaction.isAmountPaid?"Paid":"Not Paid"}</td>
+                                                                </tr>
+                                                            );
+                                                        })
+                                                    }
                                                 </tbody>
                                             </Table>
                                             </div>

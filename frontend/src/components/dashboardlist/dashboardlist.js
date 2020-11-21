@@ -4,7 +4,17 @@ import styles from './dashboard.module.css';
 import {withRouter,NavLink} from 'react-router-dom';
 
 class DashboardList extends Component{
+
+    state = {
+        routes:[]
+    }
+
+    componentDidMount(){
+        this.setState({routes:this.props.routeList.routes});
+    }
+
     render(){
+
         return (
             <Fragment >
                 <Container fluid >
@@ -14,36 +24,22 @@ class DashboardList extends Component{
                             </Col>
                         </Row>
                         <Row>
-                            <Col md={12}>
-                                <NavLink 
-                                activeClassName={styles.isactive} exact={true} to='/dashboard/home/test-id'>
-                                    <Row>
-                                        <Col md={12}  className={styles.list}>
-                                            Home
+                            {
+                                this.state.routes.map(route=>{
+                                    return (
+                                        <Col md={12}>
+                                            <NavLink 
+                                            activeClassName={styles.isactive} exact={true} to={route.routeLink} >
+                                                <Row>
+                                                    <Col md={12}  className={styles.list}>
+                                                        {route.routeName}
+                                                    </Col>
+                                                </Row>
+                                            </NavLink>
                                         </Col>
-                                    </Row>
-                                </NavLink>
-                            </Col>
-                            <Col md={12}>
-                                <NavLink 
-                                activeClassName={styles.isactive} to='/dashboard/transaction/test-id'>
-                                    <Row>
-                                        <Col md={12} className={styles.list}>
-                                            transaction
-                                        </Col>
-                                    </Row>
-                                </NavLink>
-                            </Col>
-                            <Col md={12}>
-                                <NavLink 
-                                activeClassName={styles.isactive} to='/dashboard/accountdetails/test-id'>
-                                    <Row>
-                                        <Col md={12} className={styles.list}>
-                                            Account Details
-                                        </Col>
-                                    </Row>
-                                </NavLink>
-                            </Col>
+                                    );
+                                })
+                            }
                         </Row>
                 </Container>
             </Fragment>

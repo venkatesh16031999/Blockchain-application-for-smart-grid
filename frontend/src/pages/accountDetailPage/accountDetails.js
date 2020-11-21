@@ -6,6 +6,7 @@ import web3 from '../../etheruem/web3';
 import EBContract from '../../etheruem/EB';
 import InputField from '../../components/input-field/inputfield';
 import { Form } from 'semantic-ui-react'
+import axios from '../../axios';
 
 
 class Accountdetails extends Component {
@@ -34,13 +35,14 @@ class Accountdetails extends Component {
         let balance = await web3.eth.getBalance(accounts[0]);
         balance = await web3.utils.fromWei(balance,'ether');
 
-        const lastTransaction = this.getLastTransaction();
+        const lastTransaction = await this.getLastTransaction();
         this.setState({
             accountAddress:accounts[0],
             balance:balance,
             inrBalance:Math.round(balance*26000),
-            lastTransactionWatts:lastTransaction[0],
-            EBID:this.props.match.params.id
+            lastTransactionWatts:lastTransaction[0]===""?0:lastTransaction[0],
+            EBID:this.props.match.params.id,
+            availableWatts: 5000
         });
     }
 
@@ -52,12 +54,22 @@ class Accountdetails extends Component {
         const { accountAddress,EBID, watts } = this.state;
 
         try{
-            await EBContract.methods.sendElectricPower(watts,EBID,Date.now()).send({
+
+            const timestamp = Date.now();
+
+            await EBContract.methods.sendElectricPower(watts,EBID,timestamp).send({
                 from:accountAddress
             });
-            const lastTransaction = this.getLastTransaction();
-
-            
+            const lastTransaction = await this.getLastTransaction();
+            const transaction = await axios.post("/storeLastTransaction",{ebId:EBID,watts:watts,timestamp:timestamp,isAmountPaid:lastTransaction[3]});
+            console.log("send", transaction);
+            this.setState((state,props)=>(
+                {
+                    availableWatts: state.availableWatts-Number(lastTransaction[0]),
+                    lastTransactionWatts:lastTransaction[0]
+                }
+                )
+                );
 
             this.setModalShow(false);
         }catch(e){
@@ -75,8 +87,8 @@ class Accountdetails extends Component {
                             <Container fluid>
                                     <Row>
                                         <Col md={12} className={styles.accountswarpper}>
-                                        <Button variant="primary" onClick={() => this.setModalShow(true)}>
-                                                Launch vertically centered modal
+                                            <Button variant="primary" onClick={() => this.setModalShow(true)}>
+                                                Transfer Electric currents
                                             </Button>
 
                                             <ModalContainer
@@ -125,7 +137,7 @@ class Accountdetails extends Component {
                                     <p>Available Watts </p>
                                 </div>
                                 <div className={styles.accountValue}>
-                                    <p>5000000</p>
+                                    <p>{this.state.availableWatts}</p>
                                 </div>
                             </Col>
                         </Row>
