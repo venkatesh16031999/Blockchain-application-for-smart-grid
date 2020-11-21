@@ -9,6 +9,21 @@ import styles from './dashboardlayout.module.css';
 
 
 class DashboardLayout extends Component {
+
+    state = {
+        portal: "provider"
+    }
+
+    componentDidMount(){
+        const params = this.props.location.search.replace("?","").split("=");
+        
+        if(params[0]==="admin" && params[1]==="true"){
+            this.setState({portal:"admin"});
+            this.props.history.push("/dashboard/home/admin?admin=true");
+        }
+
+    }
+
     render(){
         return (
             <Fragment>
@@ -20,11 +35,16 @@ class DashboardLayout extends Component {
                         </Row>
                         <Row>
                             <Col md={12} className="p-0">
-                                <Switch>
+                                { this.state.portal==="provider" && <Switch>
                                     <Route path="/dashboard/transaction/:id" component={DashboardTransaction}/>
                                     <Route path="/dashboard/home/:id" exact component={DashboardHome}/>
                                     <Route path="/dashboard/accountdetails/:id" exact component={Accountdetails}/>
                                 </Switch>
+                                }
+                                { this.state.portal==="admin" && <Switch>
+                                    <Route path="/dashboard/home/admin" exact render={()=><h1>admin portal</h1>}/>
+                                </Switch>
+                                }
                             </Col>
                         </Row>
                 </Container>

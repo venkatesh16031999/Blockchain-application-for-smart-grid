@@ -13,7 +13,8 @@ class DashboardHome extends Component {
         ebId:"", 
         name:"", 
         number:"",
-        email:""
+        email:"",
+        transactionStatisticsList:[]
     }
 
     async componentDidMount(){
@@ -21,8 +22,12 @@ class DashboardHome extends Component {
         try{
             const providerData = await axios.get("/getProvider/"+this.props.match.params.id);
             const {city, ebId, name, number,email} = providerData.data.result[0];
-
-            this.setState({city, ebId, name, number, email});
+            const transaction = await axios.get("/getTransactionList/"+ebId);
+            const transactionList = transaction.data.result.map(transactionData=>{
+                return transactionData.transaction.watts
+            })
+            
+            this.setState({city, ebId, name, number, email,transactionStatisticsList:transactionList});
         }catch(e){
             console.log(e);
         }
@@ -30,6 +35,19 @@ class DashboardHome extends Component {
     }
 
     render(){
+
+        let statisticsData = {
+            charts:[
+                {
+                    barChartName:"Provider's Transaction",
+                    providerTransactionList:this.state.transactionStatisticsList
+                },
+                {
+                    barChartName:"Provider's Generation",
+                    providerTransactionList: [600,200,800]
+                },
+        ]
+        }
         return (
             <Fragment>
                 <Container fluid>
@@ -74,7 +92,7 @@ class DashboardHome extends Component {
                             <Container fluid>
                                     <Row className="d-flex justify-content-center">
                                         <Col md={10} >
-                                                <BarChart ></BarChart>
+                                                {this.state.transactionStatisticsList.length!==0 && <BarChart statistics={statisticsData}></BarChart>}
                                         </Col>
                                     </Row>
                             </Container>

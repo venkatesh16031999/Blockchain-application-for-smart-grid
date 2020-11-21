@@ -29,6 +29,7 @@ exports.providerSignup = async (req, res,next) => {
     res.status(201).json("data:'Registration successfull'");
 
     }catch(err){
+        console.log(err.message);
         if(!err.statusCode){
             err.statusCode = 500;
             next(err);
@@ -41,7 +42,6 @@ exports.providerLogin = async (req, res,next) => {
     const { email, password } = req.body;
     try{
     const user = await Provider.findOne({email:email});
-    console.log(user);
     const decryptedPassword = await bcrypt.compare(password,user.password);
 
      if(!decryptedPassword){
@@ -49,7 +49,12 @@ exports.providerLogin = async (req, res,next) => {
         error.statusCode = 401;
         next(error);
     }else{
-        res.status(201).json("Login sucessfull");
+
+        const result = {
+            ebId: user.ebId
+        }
+
+        res.status(201).json(result);
     }
         
     }catch(err){

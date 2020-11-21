@@ -11,12 +11,27 @@ class Login extends Component{
 
     state={
         email:"",
-        password:""
+        password:"",
     }
 
-login=()=>{
-    console.log(this.state);
-    this.props.history.push("/dashboard/home");
+login= async ()=>{
+    
+    localStorage.removeItem("ebId");
+    const { email,password } = this.state;
+    this.setState({isLoading:true});
+    try{
+        const providerData = await axios.post("/providerLogin",{
+            email,
+            password
+        });
+        localStorage.setItem("ebId",providerData.data.ebId);
+        this.setState({isLoading:false});
+        this.props.history.push(`/dashboard/home/${providerData.data.ebId}`);
+    }catch(e){
+        this.setState({isLoading:false});
+        console.log(e);
+    }
+
 }
 
 onEmailChange = (email) => {

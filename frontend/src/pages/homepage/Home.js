@@ -9,6 +9,10 @@ class HomePage extends Component{
         this.props.history.push("/login");
     }
 
+    navigateAdmin = ()=>{
+        this.props.history.push("/dashboard/home?admin=true");
+    }
+
     render(){
         return (
             <Fragment>
@@ -27,6 +31,9 @@ class HomePage extends Component{
                         </div>
                         <div>
                             <button className={styles.dashboardbtn} onClick={this.navigate}>Visit your dashboard</button>
+                        </div>
+                        <div>
+                            <button className={styles.dashboardbtn} onClick={this.navigateAdmin}>Admin portal</button>
                         </div>
                     </Col>
                     <Col className={styles.homeRight} lg={7}>

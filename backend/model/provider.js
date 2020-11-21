@@ -25,8 +25,7 @@ const providerSchema = new mongoose.Schema({
     accountAddress:{
         type:String,
         required: true,
-        trim: true,
-        unique: true
+        trim: true
     },
     email:{
         type: String,

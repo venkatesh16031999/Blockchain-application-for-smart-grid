@@ -5,19 +5,23 @@ const transactionSchema = new mongoose.Schema({
             type: Number,
             required:true,
         },
-        date:{
-            type: Timestamp,
+        timestamp:{
+            type: Number,
             required:true
         },
         ebId:{
             type: String,
             required: true,
-            unique: true,
             trim: true
         },
         isAmountPaid:{
             type: Boolean,
             required: true,
+        },
+        provider:{
+            type: mongoose.Schema.Types.ObjectId,
+            required: true,
+            ref: 'Provider'
         }
 });
 
