@@ -30,6 +30,7 @@ contract EB{
         uint date;
         string ebId;
         bool isAmountPaid;
+        uint amount;
     }
     
     modifier adminOnly{
@@ -81,11 +82,14 @@ contract EB{
     
     function sendElectricPower(uint noOfWatts,string memory ebId,uint timestamp) public {
             require(noOfWatts>=300,"300 Watts is minimum to transfer");
+            uint oneWattPrice = 120000000000;
+            uint amountInWei = noOfWatts * oneWattPrice;
             Transaction memory newTransaction = Transaction({
                 watts: noOfWatts,
                 date: timestamp,
                 ebId: ebId,
-                isAmountPaid: false
+                isAmountPaid: false,
+                amount: amountInWei
             });
             lastTransaction[ebId] = newTransaction;
             
@@ -95,11 +99,10 @@ contract EB{
     function sendPaymentToProvider(string memory ebId,uint date) public adminOnly{
         
         Transaction storage payableTransaction = transactionList[ebId][date];
-        // uint transferAmount = payableTransaction.watts*1000;
         address payable senderAddress = address(uint160(providersList[ebId].accountAddress));
-        senderAddress.transfer(this.getBalance());
+        senderAddress.transfer( payableTransaction.amount );
         payableTransaction.isAmountPaid = true;
-        
+        lastTransaction[ebId].isAmountPaid = true;
     }
     
     function getBalance() public view returns(uint){
@@ -114,13 +117,14 @@ contract EB{
         providersList[ebId].isVerified = true;
     } 
     
-    function getLastTransaction(string memory ebId) public view returns(uint, uint, string memory,bool){
+    function getLastTransaction(string memory ebId) public view returns(uint, uint, string memory,bool,uint){
         Transaction memory transaction =  lastTransaction[ebId];
         return (
             transaction.watts,
             transaction.date,
             transaction.ebId,
-            transaction.isAmountPaid
+            transaction.isAmountPaid,
+            transaction.amount
             );
     }
     

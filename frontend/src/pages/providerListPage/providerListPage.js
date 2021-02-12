@@ -2,33 +2,48 @@ import React,{Component,Fragment} from 'react';
 import {Col,Row,Container,Table} from 'react-bootstrap';
 import {withRouter} from 'react-router-dom';
 import axios from '../../axios';
-import styles from './dashboardtransaction.module.css';
+import styles from './providerListPage.module.css';
+import EBContract from '../../etheruem/EB';
 import web3 from '../../etheruem/web3';
 
-class DashboardTransaction extends Component {
+class ProvidersListPage extends Component {
 
     state = {
-        transactionList: [],
-        portal: "provider"
+        providersList: []
     }
 
     async componentDidMount(){
-        const ebId = localStorage.getItem("ebId");
-        const transaction = await axios.get("/getTransactionList/"+ebId);
-        const transactionList = transaction.data.result.map(transactionData=>{
-            return transactionData.transaction
-        })
-        console.log(transactionList);
-        this.setState({transactionList:transactionList});
-        const params = this.props.location.search.replace("?","").split("=");
-        
-        if(params[0]==="admin" && params[1]==="true"){
-            this.setState({portal:"admin"});
+        // const ebId = localStorage.getItem("ebId");
+        // const transaction = await axios.get("/getTransactionList/"+ebId);
+        // const transactionList = transaction.data.result.map(transactionData=>{
+        //     return transactionData.transaction
+        // })
+        // console.log(transactionList);
+        // this.setState({transactionList:transactionList});
+
+        const providersList = await axios.get("/getAllProvider");
+        this.setState({providersList: providersList.data.result});
+    }
+
+    verifyProviders = async (ebId) => {
+
+        try {
+            const accounts = await web3.eth.getAccounts();
+            EBContract.methods.verifyProvider(ebId).send({
+                from: accounts[0]
+            });
+            const providersList = await axios.put(`/verifyProvider/${ebId}`);
+            this.setState({providersList: providersList.data.result});
+        } catch (error) {
+            console.log(error.message);
         }
     }
 
-    payToProvider = () => {
-
+    checkoutPayments = (ebId) => {
+        this.props.history.push({
+            pathname: `/dashboard/transaction/${ebId}`,
+            search: '?admin=true'
+          });
     }
 
     render(){
@@ -52,33 +67,28 @@ class DashboardTransaction extends Component {
                             <Container fluid>
                                     <Row className="d-flex justify-content-center">
                                         <Col md={11} >
-                                            <h3>Transaction</h3>
+                                            <h3>Providers</h3>
                                             <div className="table">
                                             <Table striped bordered hover >
                                                 <thead>
                                                     <tr>
                                                     <th>SI NO</th>
-                                                    <th>Date</th>
-                                                    <th>Transfered (Watts)</th>
-                                                    <th>Amount (Ether)</th>
-                                                    <th>Amount Paid</th>
+                                                    <th>EB ID</th>
+                                                    <th>City</th>
+                                                    <th>isVerified</th>
+                                                    <th>Check Payments</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     {
-                                                        this.state.transactionList.map((transaction,index)=>{
+                                                        this.state.providersList.map((providers,index)=>{
                                                             return (
                                                                 <tr>
                                                                     <td>{index+1}</td>
-                                                                    <td>{new Date(transaction.timestamp).toDateString()}</td>
-                                                                    <td>{transaction.watts}</td>
-                                                                    <td>{web3.utils.fromWei(transaction.amount.toString(), "ether")}</td>
-                                                                    {
-                                                                        this.state.portal === "provider" && <td>{transaction.isAmountPaid?"Paid":"Not Paid"}</td>
-                                                                    }
-                                                                    {
-                                                                        this.state.portal === "admin" && <td>{transaction.isAmountPaid?"Paid":<div className={styles.flexCenter}><button onClick={()=>this.payToProvider()}>Pay</button></div>}</td>
-                                                                    }
+                                                                    <td>{providers.ebId}</td>
+                                                                    <td>{providers.city}</td>
+                                                                    <td>{providers.isVerified?"Verified":<div className={styles.flexCenter}><button onClick={()=>this.verifyProviders(providers.ebId)}>Verify</button></div>}</td>
+                                                                    <td><div className={styles.flexCenter}><button onClick={()=>this.checkoutPayments(providers.ebId)}>Payments</button></div></td>
                                                                 </tr>
                                                             );
                                                         })
@@ -97,4 +107,4 @@ class DashboardTransaction extends Component {
     }
 }
 
-export default withRouter(DashboardTransaction);
+export default withRouter(ProvidersListPage);

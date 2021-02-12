@@ -44,8 +44,8 @@ class DashboardContainer extends Component {
             adminList:{
                 routes: [
                     {
-                        routeName: "adminHome",
-                        routeLink: "/dummy"
+                        routeName: "Providers",
+                        routeLink: "/dashboard/home/admin"
                     }
                 ]
             }

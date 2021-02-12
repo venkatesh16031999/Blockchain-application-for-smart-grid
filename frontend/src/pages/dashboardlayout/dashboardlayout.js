@@ -5,6 +5,7 @@ import Accountdetails from '../accountDetailPage/accountDetails';
 import {Col,Row,Container} from 'react-bootstrap';
 import {withRouter,Switch,Route} from 'react-router-dom';
 import Header from '../../components/header/header';
+import providersListPage from '../providerListPage/providerListPage';
 import styles from './dashboardlayout.module.css';
 
 
@@ -42,7 +43,8 @@ class DashboardLayout extends Component {
                                 </Switch>
                                 }
                                 { this.state.portal==="admin" && <Switch>
-                                    <Route path="/dashboard/home/admin" exact render={()=><h1>admin portal</h1>}/>
+                                    <Route path="/dashboard/home/admin" exact component={providersListPage} />
+                                    <Route path="/dashboard/transaction/:id" component={DashboardTransaction}/>
                                 </Switch>
                                 }
                             </Col>

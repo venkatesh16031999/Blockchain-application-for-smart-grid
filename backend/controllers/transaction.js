@@ -3,13 +3,13 @@ const Provider = require('../model/provider');
 
 exports.storeLastTransaction = async (req,res) => {
 
-    const {ebId, timestamp, watts, isAmountPaid} = req.body;
+    const {ebId, timestamp, watts, isAmountPaid, amount} = req.body;
 
     try{
 
         const provider = await Provider.findOne({ebId:ebId});
 
-        const newTransaction = new Transaction({ebId, timestamp, watts, isAmountPaid,provider:provider._id});
+        const newTransaction = new Transaction({ebId, timestamp, watts, isAmountPaid,provider:provider._id, amount});
         await newTransaction.save();
 
         await provider.transactions.push(newTransaction);

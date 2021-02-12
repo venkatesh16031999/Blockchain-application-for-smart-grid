@@ -61,7 +61,7 @@ class Accountdetails extends Component {
                 from:accountAddress
             });
             const lastTransaction = await this.getLastTransaction();
-            const transaction = await axios.post("/storeLastTransaction",{ebId:EBID,watts:watts,timestamp:timestamp,isAmountPaid:lastTransaction[3]});
+            const transaction = await axios.post("/storeLastTransaction",{ebId:EBID,watts:watts,timestamp:timestamp,isAmountPaid:lastTransaction[3], amount: lastTransaction[4]});
             console.log("send", transaction);
             this.setState((state,props)=>(
                 {

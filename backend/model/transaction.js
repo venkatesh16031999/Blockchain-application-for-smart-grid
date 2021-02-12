@@ -18,6 +18,12 @@ const transactionSchema = new mongoose.Schema({
             type: Boolean,
             required: true,
         },
+        amount: {
+            type: Number,
+            required: true,
+            min: 0,
+            default: 0
+        },
         provider:{
             type: mongoose.Schema.Types.ObjectId,
             required: true,

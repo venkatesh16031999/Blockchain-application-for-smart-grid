@@ -42,7 +42,7 @@ require("./middlewares/google_auth")(passport);
 
 app.use(helmet());
 app.use(cors());
-app.use(morgan("dev"));
+// app.use(morgan("dev"));
 
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());

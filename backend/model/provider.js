@@ -38,6 +38,10 @@ const providerSchema = new mongoose.Schema({
         required: true,
         trim: true
     },
+    isVerified:{
+        type: Boolean,
+        default: false
+    },
     transactions:[{type: mongoose.Schema.Types.ObjectId,ref:'Transaction'}]
 });
 

@@ -88,3 +88,43 @@ exports.getProvider = async (req, res,next) => {
     }
 
 }
+
+
+exports.getAllProvider = async (req, res,next) => {
+    try{
+    const user = await Provider.find();
+    console.log(user);
+
+     if(!user){
+        const error = new Error("Provider not found");
+        error.statusCode = 401;
+        next(error);
+    }
+
+        res.status(201).json({result: user});
+        
+    }catch(err){
+        if(!err.statusCode){
+            err.statusCode = 500;
+            next(err);
+        }
+    }
+
+}
+
+exports.verifyProvider = async (req, res,next) => {
+    try{
+
+    const { id } = req.params;
+    await Provider.updateOne({ebId: id},{isVerified: true});
+    const provider = await Provider.find();
+    res.status(201).json({result: provider});
+        
+    }catch(err){
+        if(!err.statusCode){
+            err.statusCode = 500;
+            next(err);
+        }
+    }
+
+}

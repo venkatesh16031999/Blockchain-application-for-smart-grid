@@ -4,7 +4,7 @@ import  EB from './build/EB.json';
 let EBContract;
 
 try{
-     EBContract = new web3.eth.Contract( EB.abi , '0xC7bDD2613E7086Fc373e76121A4316Da623E61aD' );
+     EBContract = new web3.eth.Contract( EB.abi , '0x035F5f1e113B3D373Fb6e0898ECDB20dAED367b4' );
 }catch{
 
 }

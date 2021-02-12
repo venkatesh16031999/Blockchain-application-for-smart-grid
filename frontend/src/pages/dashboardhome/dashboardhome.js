@@ -14,20 +14,21 @@ class DashboardHome extends Component {
         name:"", 
         number:"",
         email:"",
-        transactionStatisticsList:[]
+        transactionStatisticsList:[],
+        isVerified: false
     }
 
     async componentDidMount(){
         
         try{
             const providerData = await axios.get("/getProvider/"+this.props.match.params.id);
-            const {city, ebId, name, number,email} = providerData.data.result[0];
+            const {city, ebId, name, number,email, isVerified} = providerData.data.result[0];
             const transaction = await axios.get("/getTransactionList/"+ebId);
             const transactionList = transaction.data.result.map(transactionData=>{
                 return transactionData.transaction.watts
             })
             
-            this.setState({city, ebId, name, number, email,transactionStatisticsList:transactionList});
+            this.setState({city, ebId, name, number, email,transactionStatisticsList:transactionList, isVerified: isVerified});
         }catch(e){
             console.log(e);
         }
@@ -67,7 +68,7 @@ class DashboardHome extends Component {
                                         </Col>
                                         <Col md={3} className={styles.verification}>
                                             <img height="140px" width="130px" src={Verification} />
-                                            <h5>Verified</h5>
+                                            <h5>{this.state.isVerified?"verified":"Not Verified"}</h5>
                                         </Col>
                                     </Row>
                                 </Container>
